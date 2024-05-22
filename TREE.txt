@@ -1,0 +1,79 @@
+#include <iostream>
+
+using namespace std;
+
+// Define the structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    // Constructor
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to insert a new node into the binary search tree
+TreeNode* insert(TreeNode* root, int value) {
+    // If the tree is empty, create a new node as the root
+    if (root == nullptr) {
+        return new TreeNode(value);
+    }
+    // Otherwise, recursively insert the new node into the left or right subtree
+    if (value < root->data) {
+        root->left = insert(root->left, value);
+    } else {
+        root->right = insert(root->right, value);
+    }
+    return root;
+}
+
+// Function to construct a simple binary tree
+TreeNode* constructBinaryTree(TreeNode* root, int value) {
+    // If the tree is empty, create a new node as the root
+    if (root == nullptr) {
+        return new TreeNode(value);
+    }
+    // If the left child of the root is empty, insert the new node as the left child
+    if (root->left == nullptr) {
+        root->left = new TreeNode(value);
+    } else if (root->right == nullptr) { // If the right child of the root is empty, insert the new node as the right child
+        root->right = new TreeNode(value);
+    } else { // Otherwise, recursively construct the binary tree
+        if (root->left != nullptr) {
+            constructBinaryTree(root->left, value);
+        } else {
+            constructBinaryTree(root->right, value);
+        }
+    }
+    return root;
+}
+
+// Function to perform inorder traversal of the binary tree (left, root, right)
+void inorderTraversal(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+    inorderTraversal(root->left);
+    cout << root->data << " ";
+    inorderTraversal(root->right);
+}
+
+int main() {
+    int numValues;
+    cout << "Enter the number of values: ";
+    cin >> numValues;
+
+    TreeNode* root = nullptr;
+    int value;
+    cout << "Enter the values:" << endl;
+    for (int i = 0; i < numValues; ++i) {
+        cin >> value;
+        root = insert(root, value); // Change to constructBinaryTree(root, value) for simple binary tree
+    }
+
+    cout << "Binary Tree (Inorder Traversal): ";
+    inorderTraversal(root);
+    cout << endl;
+
+    return 0;
+}
